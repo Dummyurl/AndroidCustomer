@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="@dimen/dialog_back"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/dialog_back"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dialog_back_blue">
+
+            <com.samyotech.fabcustomer.utils.CustomTextViewBold
+                android:id="@+id/ctvbTitle"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="PERSONAL INFORMATION"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <com.samyotech.fabcustomer.utils.InputOpenFieldView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <com.samyotech.fabcustomer.utils.CustomEditText
+                    android:id="@+id/etNameD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="FULL NAME"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text="" />
+
+            </com.samyotech.fabcustomer.utils.InputOpenFieldView>
+
+            <com.samyotech.fabcustomer.utils.InputFieldView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <com.samyotech.fabcustomer.utils.CustomEditText
+                    android:id="@+id/etEmailD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:hint="EMAIL ADDRESS"
+                    android:singleLine="true"
+                    android:text="" />
+
+            </com.samyotech.fabcustomer.utils.InputFieldView>
+
+
+            <com.samyotech.fabcustomer.utils.InputOpenFieldView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <com.samyotech.fabcustomer.utils.CustomEditText
+                    android:id="@+id/etMobileD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="MOBILE NUMBER"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:text="" />
+
+            </com.samyotech.fabcustomer.utils.InputOpenFieldView>
+
+            <LinearLayout
+                android:id="@+id/ll_gender_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="GENDER"
+                    android:textSize="14sp" />
+
+                <RadioGroup
+                    android:id="@+id/rg_gender_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rb_gender_female"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:text="Female"
+                        android:checked="true"
+                        android:textColor="@drawable/app_radio_button_selector"
+                        android:textSize="14sp" />
+
+                    <RadioButton
+                        android:id="@+id/rb_gender_male"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:text="Male"
+                        android:textColor="@drawable/app_radio_button_selector"
+                        android:textSize="14sp" />
+                </RadioGroup>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="35dp"
+            android:background="@color/colorPrimaryDark" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.samyotech.fabcustomer.utils.CustomTextViewBold
+                android:id="@+id/tvYes"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="SAVE"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark" />
+
+            <com.samyotech.fabcustomer.utils.CustomTextViewBold
+                android:id="@+id/tvNo"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="CANCEL"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

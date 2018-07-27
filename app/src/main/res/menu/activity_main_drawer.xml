@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_homenavi"
+            android:title="Home" />
+
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_chat"
+            android:title="Chat" />
+
+
+        <item
+            android:id="@+id/nav_booking"
+            android:icon="@drawable/ic_booking"
+            android:title="My Bookings" />
+        <item
+            android:id="@+id/nav_appointment"
+            android:icon="@drawable/ic_appointment"
+            android:title="My Appointments" />
+
+        <item
+            android:id="@+id/nav_notification"
+            android:icon="@drawable/ic_notification"
+            android:title="Notification" />
+        <item
+            android:id="@+id/nav_discount"
+            android:icon="@drawable/ic_discount"
+            android:title="Get Discount" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_history"
+            android:title="History" />
+
+        <item
+            android:id="@+id/nav_profilesetting"
+            android:icon="@drawable/ic_settings"
+            android:title="Profile Setting" />
+        <item
+            android:id="@+id/nav_tickets"
+            android:icon="@drawable/ic_ticket"
+            android:title="Support" />
+
+    </group>
+</menu>

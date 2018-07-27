@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="com.samyotech.fabcustomer.ui.activity.ProfileSettingActivity">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                card_view:cardBackgroundColor="@color/white"
+                card_view:cardCornerRadius="5dp"
+                card_view:cardElevation="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/header"
+                    android:padding="10dp">
+
+                    <com.samyotech.fabcustomer.utils.CustomTextViewBold
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PROFILE PICTURE"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ivProfile"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_below="@+id/title"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/dummyuser_image" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ivProfile"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <com.samyotech.fabcustomer.utils.CustomButton
+                            android:id="@+id/btnDelete"
+                            android:layout_width="80dp"
+                            android:layout_height="25dp"
+                            android:background="@drawable/button_selector3"
+                            android:text="delete"
+                            android:textColor="@color/white" />
+
+                        <com.samyotech.fabcustomer.utils.CustomButton
+                            android:id="@+id/btnChange"
+                            android:layout_width="80dp"
+                            android:layout_height="25dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/button_selector3"
+                            android:text="Change"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                card_view:cardBackgroundColor="@color/white"
+                card_view:cardCornerRadius="5dp"
+                card_view:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/header"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.samyotech.fabcustomer.utils.CustomTextViewBold
+                            android:id="@+id/title2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PERSONAL INFORMATION"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/ivPersonalInfoChange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_edit" />
+
+                    </RelativeLayout>
+
+                    <com.samyotech.fabcustomer.utils.InputFieldView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.samyotech.fabcustomer.utils.CustomEditText
+                            android:id="@+id/etName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:hint="FULL NAME"
+                            android:singleLine="true"
+                            android:text="Varun" />
+
+                    </com.samyotech.fabcustomer.utils.InputFieldView>
+
+                    <com.samyotech.fabcustomer.utils.InputFieldView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.samyotech.fabcustomer.utils.CustomEditText
+                            android:id="@+id/etEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:hint="EMAIL ADDRESS"
+                            android:singleLine="true"
+                            android:text="varun@gm.com" />
+
+                    </com.samyotech.fabcustomer.utils.InputFieldView>
+
+
+                    <com.samyotech.fabcustomer.utils.InputFieldView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.samyotech.fabcustomer.utils.CustomEditText
+                            android:id="@+id/etMobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:hint="MOBILE NUMBER"
+                            android:singleLine="true"
+                            android:text="8109973009" />
+
+                    </com.samyotech.fabcustomer.utils.InputFieldView>
+
+                    <com.samyotech.fabcustomer.utils.InputFieldView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.samyotech.fabcustomer.utils.CustomEditText
+                            android:id="@+id/etGender"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:hint="GENDER"
+                            android:singleLine="true"
+                            android:text="Male" />
+
+                    </com.samyotech.fabcustomer.utils.InputFieldView>
+
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card2"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                card_view:cardBackgroundColor="@color/white"
+                card_view:cardCornerRadius="5dp"
+                card_view:cardElevation="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <com.samyotech.fabcustomer.utils.CustomTextViewBold
+                        android:id="@+id/title3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="PASSWORD CHANGE"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivPasswordChange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_edit" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card3"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                card_view:cardBackgroundColor="@color/white"
+                card_view:cardCornerRadius="5dp"
+                card_view:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/header"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.samyotech.fabcustomer.utils.CustomTextViewBold
+                            android:id="@+id/title4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="SET ADDRESS"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/ivAddressChange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_edit" />
+
+                    </RelativeLayout>
+
+
+                    <com.samyotech.fabcustomer.utils.InputFieldView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.samyotech.fabcustomer.utils.CustomEditText
+                            android:id="@+id/etHomeAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_home"
+                            android:editable="false"
+                            android:hint="SET HOME ADDRESS"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:text="Indore" />
+
+                    </com.samyotech.fabcustomer.utils.InputFieldView>
+
+                    <com.samyotech.fabcustomer.utils.InputFieldView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.samyotech.fabcustomer.utils.CustomEditText
+                            android:id="@+id/etOfficeAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_office"
+                            android:editable="false"
+                            android:hint="SET OFFICE ADDRESS"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:text="Indore" />
+
+                    </com.samyotech.fabcustomer.utils.InputFieldView>
+
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvSignOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card4"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                card_view:cardBackgroundColor="@color/white"
+                card_view:cardCornerRadius="5dp"
+                card_view:cardElevation="4dp">
+
+                <com.samyotech.fabcustomer.utils.CustomTextViewBold
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center"
+                    android:background="@color/red"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:paddingLeft="20dp"
+                    android:text="SignOut"
+                    android:textColor="@color/white" />
+
+            </android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/RRsncbar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_alignParentBottom="true"></RelativeLayout>
+
+
+</RelativeLayout>

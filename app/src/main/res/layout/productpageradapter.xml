@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/IVproduct"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop" />
+
+    <com.samyotech.fabcustomer.utils.CustomTextView
+        android:id="@+id/CTVproductname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/IVproduct"
+        android:text="procuct Name" />
+
+    <com.samyotech.fabcustomer.utils.CustomTextView
+        android:id="@+id/CTVproductprice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/CTVproductname"
+        android:text="$450"
+        android:textColor="@color/colorPrimary" />
+
+    <LinearLayout
+        android:id="@+id/LLBuynow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/IVproduct"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <com.samyotech.fabcustomer.utils.CustomTextView
+            android:id="@+id/CTVbuynow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/IVproduct"
+            android:text="Buy Now" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_buyright_arrow" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

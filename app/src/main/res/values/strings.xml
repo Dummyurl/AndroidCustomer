@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">FabCustomer</string>
+
+    <string name="permission_pick_rationale">READ_EXTERNAL_STORAGE permission is needed to pick image.</string>
+    <string name="permission_crop_rationale">WRITE_EXTERNAL_STORAGE permission is needed to save cropped image.</string>
+    <string name="button_allow">Allow</string>
+    <string name="button_deny">Deny</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
+
+    <string name="hindi">Hindi</string>
+
+    <string name="intro_1">Search your nearby \n Make-up Artist \n and Hair Stylish.</string>
+    <string name="intro_2">Make yourself more beatiful more than you think.</string>
+    <string name="intro_3">Hire the best Phtographer &amp; create your moment.</string>
+
+    <string name="internet_concation">Please enable your internet connection.</string>
+
+
+    <string name="server_error">Unable to connect server.</string>
+
+
+</resources>

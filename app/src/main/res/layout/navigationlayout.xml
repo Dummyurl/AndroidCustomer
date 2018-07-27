@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/llProfileClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="10dp">
+
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/img_profile"
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/dummyuser_image" />
+                    </RelativeLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="3dp"
+
+                        android:orientation="vertical">
+
+                        <com.samyotech.fabcustomer.utils.CustomTextViewBold
+                            android:id="@+id/tvName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:text="mayank"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+
+                        <com.samyotech.fabcustomer.utils.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="mayank@gmail.com"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llProfileClick"
+                android:orientation="vertical">
+
+                <com.samyotech.fabcustomer.utils.CustomTextViewBold
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/colorPrimary"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:text="Become An Artist"
+                    android:textColor="@color/white" />
+
+
+                <com.samyotech.fabcustomer.utils.CustomTextView
+                    android:id="@+id/CTVhome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:text="Home"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".1dp"
+                    android:background="@color/lightgray" />
+
+                <com.samyotech.fabcustomer.utils.CustomTextView
+                    android:id="@+id/CTVchat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:text="Chat"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".1dp"
+                    android:background="@color/lightgray" />
+
+                <com.samyotech.fabcustomer.utils.CustomTextView
+                    android:id="@+id/CTVbooking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:text="Current Bookings"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".1dp"
+                    android:background="@color/lightgray" />
+
+                <com.samyotech.fabcustomer.utils.CustomTextView
+                    android:id="@+id/CTVnotification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:text="Notification"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".1dp"
+                    android:background="@color/lightgray" />
+
+                <com.samyotech.fabcustomer.utils.CustomTextView
+                    android:id="@+id/CTVpromotion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:text="Promotion"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".1dp"
+                    android:background="@color/lightgray" />
+
+                <com.samyotech.fabcustomer.utils.CustomTextView
+                    android:id="@+id/CTVdiscount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:text="Get Discount"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".1dp"
+                    android:background="@color/lightgray" />
+
+                <com.samyotech.fabcustomer.utils.CustomTextView
+                    android:id="@+id/CTVhistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:text="History"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".1dp"
+                    android:background="@color/lightgray" />
+
+                <com.samyotech.fabcustomer.utils.CustomTextView
+                    android:id="@+id/CTVprofilesetting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:text="Profile Setting"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".1dp"
+                    android:background="@color/gray" />
+
+                <com.samyotech.fabcustomer.utils.CustomTextView
+                    android:id="@+id/CTVpayment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:text="Payment Mathod"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".1dp"
+                    android:background="@color/lightgray" />
+
+
+                <com.samyotech.fabcustomer.utils.CustomTextViewBold
+                    android:id="@+id/CTVBsignout"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="50dp"
+                    android:background="@color/red"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:text="SignOut"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

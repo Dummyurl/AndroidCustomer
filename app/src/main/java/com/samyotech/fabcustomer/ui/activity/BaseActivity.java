@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,14 +28,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -44,21 +53,41 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.payu.magicretry.MainActivity;
 import com.samyotech.fabcustomer.DTO.UserBooking;
 import com.samyotech.fabcustomer.DTO.UserDTO;
 import com.samyotech.fabcustomer.R;
+import com.samyotech.fabcustomer.controller.FirebaseController;
+import com.samyotech.fabcustomer.firebase_model.LocationModel;
 import com.samyotech.fabcustomer.https.HttpsRequest;
 import com.samyotech.fabcustomer.interfacess.Consts;
+import com.samyotech.fabcustomer.interfacess.FirebaseDataTravel;
 import com.samyotech.fabcustomer.interfacess.Helper;
 import com.samyotech.fabcustomer.preferences.SharedPrefrence;
+import com.samyotech.fabcustomer.ui.adapter.SearchLocation;
 import com.samyotech.fabcustomer.ui.fragment.AppointmentFrag;
 import com.samyotech.fabcustomer.ui.fragment.Home;
 import com.samyotech.fabcustomer.ui.fragment.Tickets;
@@ -69,6 +98,7 @@ import com.samyotech.fabcustomer.utils.DividerItemDecoration;
 import com.samyotech.fabcustomer.utils.FontCache;
 import com.samyotech.fabcustomer.utils.ProjectUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -76,16 +106,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BaseActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,OnMapReadyCallback,FirebaseDataTravel, GoogleMap.OnInfoWindowClickListener {
     private String TAG = BaseActivity.class.getSimpleName();
     HashMap<String, String> parms = new HashMap<>();
 
-    private FrameLayout frame;
+    //private FrameLayout frame;
     private View contentView;
     public NavigationView navigationView;
     public RelativeLayout header;
@@ -119,6 +150,36 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.C
     private CircleImageView img_profile;
     private CustomTextViewBold tvName;
     private CustomTextView tvEmail;
+    private AutoCompleteTextView searchEdit;
+    List<LocationModel> locationModels=new ArrayList<>();
+    SearchLocation searchLocation;
+
+    private GoogleMap mMap;
+    private CameraPosition mCameraPosition;
+
+    // The entry points to the Places API.
+    private GeoDataClient mGeoDataClient;
+    private PlaceDetectionClient mPlaceDetectionClient;
+
+    // The entry point to the Fused Location Provider.
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+
+    // A default location (Sydney, Australia) and default zoom to use when location permission is
+    // not granted.
+    private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
+    private static final int DEFAULT_ZOOM = 15;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private boolean mLocationPermissionGranted;
+    SupportMapFragment mapFragment;
+
+    // The geographical location where the device is currently located. That is, the last-known
+    // location retrieved by the Fused Location Provider.
+    private Location mLastKnownLocation;
+
+    // Keys for storing activity state.
+    private static final String KEY_CAMERA_POSITION = "camera_position";
+    private static final String KEY_LOCATION = "location";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,18 +188,49 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.C
         mContext = BaseActivity.this;
         mHandler = new Handler();
         inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        /*this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
+
+        /*for trasparent status bar*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+
+        /*call controller constructor*/
+        FirebaseController firebaseController=new FirebaseController(getApplicationContext());
+        /*call api get location data from firebase database*/
+        firebaseController.getLocationData();
+        firebaseController.registerTravel(this);
 
         prefrence = SharedPrefrence.getInstance(mContext);
         userDTO = prefrence.getParentUser(Consts.USER_DTO);
 
         setUpGClient();
+        mapSetUp(savedInstanceState);
 
-        frame = (FrameLayout) findViewById(R.id.frame);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         contentView = findViewById(R.id.content);
         headerNameTV = findViewById(R.id.headerNameTV);
         menuLeftIV = (ImageView) findViewById(R.id.menuLeftIV);
+        searchEdit=(AutoCompleteTextView)findViewById(R.id.searchEdit) ;
+        //searchLocation=new SearchLocation(getApplicationContext(),R.layout.activity_main,R.id.searchEdit,locationModels);
+        /*searchLocation=new SearchLocation(getApplicationContext(),locationModels);
+        searchEdit.setAdapter(searchLocation);
+        searchEdit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(getApplicationContext(),locationModels.get(position).getTitle(),Toast.LENGTH_LONG);
+                searchEdit.setText(String.valueOf(locationModels.get(position).getTitle()));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locationModels.get(position).getLatitude(),
+                        locationModels.get(position).getLongitude()), DEFAULT_ZOOM));
+            }
+        });*/
+
+
 
 
         navHeader = navigationView.getHeaderView(0);
@@ -211,6 +303,8 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.C
 
     }
 
+
+
     public void applyCustomFont(MenuItem mi) {
         Typeface customFont = FontCache.getTypeface("Poppins-Regular.otf", BaseActivity.this);
         SpannableString spannableString = new SpannableString(mi.getTitle());
@@ -221,25 +315,6 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.C
     private void loadHomeFragment() {
 
         selectNavMenu();
-
-
-        Runnable mPendingRunnable = new Runnable() {
-            @Override
-            public void run() {
-                Fragment fragment = getHomeFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
-        };
-
-        if (mPendingRunnable != null) {
-            mHandler.post(mPendingRunnable);
-        }
-
-
         drawer.closeDrawers();
 
         invalidateOptionsMenu();
@@ -300,7 +375,7 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-                switch (menuItem.getItemId()) {
+                /*switch (menuItem.getItemId()) {
                     case R.id.nav_home:
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_MAIN;
@@ -341,7 +416,7 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.C
                     default:
                         navItemIndex = 0;
 
-                }
+                }*/
 
                 if (menuItem.isChecked()) {
                     menuItem.setChecked(false);
@@ -485,6 +560,9 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.C
                 }
                 break;
         }
+
+
+
     }
 
     @Override
@@ -544,6 +622,21 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.C
         if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
             getMyLocation();
         }
+
+
+
+        mLocationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+                }
+            }
+        }
+        updateLocationUI();
+
     }
 
     private synchronized void setUpGClient() {
@@ -559,7 +652,7 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public void updateLocation() {
         // ProjectUtils.showProgressDialog(mContext, true, getResources().getString(R.string.please_wait));
-        new HttpsRequest(Consts.UPDATE_LOCATION_API, parms, mContext).stringPost(TAG, new Helper() {
+       /* new HttpsRequest(Consts.UPDATE_LOCATION_API, parms, mContext).stringPost(TAG, new Helper() {
             @Override
             public void backResponse(boolean flag, String msg, JSONObject response) {
                 if (flag) {
@@ -569,8 +662,266 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 }
             }
-        });
+        });*/
     }
 
 
+
+    /*implement map screen*/
+    private void mapSetUp(Bundle savedInstanceState) {
+
+        if (savedInstanceState != null) {
+            mLastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
+            mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
+        }
+
+
+
+        // Construct a GeoDataClient.
+        mGeoDataClient = Places.getGeoDataClient(this, null);
+
+        // Construct a PlaceDetectionClient.
+        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
+
+        // Construct a FusedLocationProviderClient.
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // Build the map.
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mMap = map;
+
+        // Use a custom info window adapter to handle multiple lines of text in the
+        // info window contents.
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            @Override
+            // Return null here, so that getInfoContents() is called next.
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(final Marker marker) {
+                // Inflate the layouts for the info window, title and snippet.
+                View infoWindow = getLayoutInflater().inflate(R.layout.custom_info_contents,
+                        (FrameLayout) findViewById(R.id.map), false);
+
+                TextView title = ((TextView) infoWindow.findViewById(R.id.title));
+                ImageView imageView = ((ImageView) infoWindow.findViewById(R.id.imageView));
+                TextView emailTv = ((TextView) infoWindow.findViewById(R.id.emailTv));
+
+                try {
+                    JSONArray jsonArray=new JSONArray(marker.getSnippet());
+                    emailTv.setText(String.valueOf(jsonArray.get(0)));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+                title.setText(marker.getTitle());
+
+                return infoWindow;
+            }
+        });
+
+        mMap.setOnInfoWindowClickListener(this);
+
+
+        // Prompt the user for permission.
+        getLocationPermission();
+
+        // Turn on the My Location layer and the related control on the map.
+        updateLocationUI();
+
+        // Get the current location of the device and set the position of the map.
+        getDeviceLocation();
+    }
+    /**
+     * Gets the current location of the device, and positions the map's camera.
+     */
+    private void getDeviceLocation() {
+        /*
+         * Get the best and most recent location of the device, which may be null in rare
+         * cases when a location is not available.
+         */
+        try {
+            if (mLocationPermissionGranted) {
+                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful()) {
+                            // Set the map's camera position to the current location of the device.
+                            mLastKnownLocation = task.getResult();
+                            if(mLastKnownLocation!=null){
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(mLastKnownLocation.getLatitude(),
+                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            }
+
+                        } else {
+                            Log.d(TAG, "Current location is null. Using defaults.");
+                            Log.e(TAG, "Exception: %s", task.getException());
+                            mMap.moveCamera(CameraUpdateFactory
+                                    .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+
+    /**
+     * Prompts the user for permission to use the device location.
+     */
+    private void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+
+
+
+    /**
+     * Updates the map's UI settings based on whether the user has granted location permission.
+     */
+    private void updateLocationUI() {
+        if (mMap == null) {
+            return;
+        }
+        try {
+            if (mLocationPermissionGranted) {
+
+
+                if (mapFragment != null &&
+                        mapFragment.getView().findViewById(Integer.parseInt("1")) != null) {
+                    // Get the button view
+                    View locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+
+                    // and next place it, on bottom right (as Google Maps app)
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                            locationButton.getLayoutParams();
+                    // position on right bottom
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+                    layoutParams.setMargins(0, 0, 30, 120);
+                }
+
+
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                mMap.getUiSettings().setCompassEnabled(false);
+                mMap.getUiSettings().setMapToolbarEnabled(false);
+
+
+            } else {
+                mMap.setMyLocationEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mMap.getUiSettings().setCompassEnabled(false);
+                mLastKnownLocation = null;
+                getLocationPermission();
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+
+    /*data get from controller with help interface*/
+    @Override
+    public void trasferData(DataSnapshot dataSnapshot) {
+        locationModels.clear();
+        for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+            LocationModel locationModel=dataSnapshot1.getValue(LocationModel.class);
+            System.out.println("-------------------data----------baseActivity-----"+String.valueOf(locationModel.getTitle())+"       "+String.valueOf(locationModel.getLatitude()));
+            if (mMap != null) {
+                LatLng loc = new LatLng(locationModel.getLatitude(), locationModel.getLongitude());
+                //mMap.addMarker(new MarkerOptions().position(loc).title(locationModel.getTitle()).icon());
+
+                // create marker
+                MarkerOptions marker = new MarkerOptions();
+                marker.position(loc);
+                marker.title(locationModel.getTitle());
+
+                JSONArray jsonArray=new JSONArray();
+                try {
+                    jsonArray.put(0,locationModel.getEmail());
+                    jsonArray.put(1,"link");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                marker.snippet(String.valueOf(jsonArray));
+                marker.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher));
+                mMap.addMarker(marker);
+
+
+
+
+
+                HashMap hashMap=new HashMap();
+                hashMap.get("");
+                locationModels.add(locationModel);
+            }
+
+        }
+
+        /*create serach adapter*/
+        searchLocation=new SearchLocation(getApplicationContext(),locationModels);
+        searchEdit.setAdapter(searchLocation);
+        searchEdit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(getApplicationContext(),locationModels.get(position).getTitle(),Toast.LENGTH_LONG);
+                //searchEdit.setText(String.valueOf(locationModels.get(position).getTitle()));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locationModels.get(position).getLatitude(),
+                        locationModels.get(position).getLongitude()), DEFAULT_ZOOM));
+            }
+        });
+        searchLocation.notifyDataSetChanged();
+    }
+
+    /*alert click on map icon*/
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        LatLng latLng=marker.getPosition();
+        String email=null;
+        try {
+            JSONArray jsonArray=new JSONArray(marker.getSnippet());
+            email=String.valueOf(jsonArray.get(0));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String title=marker.getTitle();
+        Toast.makeText(BaseActivity.this,String.valueOf(title),Toast.LENGTH_LONG).show();
+        /*Intent intent=new Intent(BaseActivity.this,user_Infomation.class);
+        intent.putExtra("email",email);
+        intent.putExtra("title",title);
+        startActivity(intent);*/
+    }
 }
